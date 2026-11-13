@@ -1,0 +1,8 @@
+{
+  "firestore": {
+    "database": "ai-studio-remixaiprompthub-e78fece7-0929-47c1-b87c-99611692c974",
+    "location": "asia-southeast1",
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  }
+}

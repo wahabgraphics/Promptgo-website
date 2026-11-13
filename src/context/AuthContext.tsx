@@ -45,6 +45,8 @@ const BOOTSTRAPPED_ADMIN_EMAILS = [
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 const checkAdminStatus = async (user: FirebaseUser, profile?: UserSubscription | null): Promise<boolean> => {
+    await user.getIdToken(true); // <-- YEH NAYI LINE ADD KAREIN
+    
   if (profile?.role === 'admin') {
     return true;
   }
