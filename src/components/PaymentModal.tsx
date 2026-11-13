@@ -32,20 +32,20 @@ const PAYMENT_ACCOUNTS: {
     method: 'JazzCash',
     label: 'JazzCash Mobile Account',
     accountTitle: 'AI Prompt Hub (Shayan)',
-    accountNumber: '0300-1234567'
+    accountNumber: '0335-2414042'
   },
   {
     method: 'Easypaisa',
     label: 'Easypaisa Mobile Account',
     accountTitle: 'AI Prompt Hub (Shayan)',
-    accountNumber: '0345-1234567'
+    accountNumber: '0335-2414042'
   },
   {
     method: 'Bank Transfer',
     label: 'Bank Transfer (IBFT / Raast)',
     bankName: 'Meezan Bank',
     accountTitle: 'AI Prompt Hub',
-    accountNumber: 'PK00MEZN0000000000000000'
+    accountNumber: 'PK37ABPA0010133942870019'
   }
 ];
 
