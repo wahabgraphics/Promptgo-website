@@ -197,6 +197,16 @@ function HomePage() {
         )}
       </Header>
 
+
+
+  {/* Adsterra Banner */}
+      <div className="w-full overflow-x-auto flex justify-center py-4">
+        <AdsterraBanner />
+      </div>
+
+
+
+
       {/* 2. MAIN BODY CONTAINER */}
       <main
         className={`flex-1 w-full py-10 sm:py-12 transition-colors ${
