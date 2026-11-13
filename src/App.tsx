@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import AdsterraBanner from './components/AdsterraBanner';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
@@ -22,6 +23,7 @@ import { PromptItem, MasterPromptGuide } from './types';
 import { fetchAllPrompts, fetchAllMasterPrompts } from './services/promptService';
 import { INITIAL_CATEGORIES } from './data/initialData';
 import { Bookmark, RefreshCw, AlertCircle, ShieldAlert, X } from 'lucide-react';
+
 
 function HomePage() {
   const { currentUser, userProfile } = useAuth();
@@ -344,6 +346,18 @@ function HomePage() {
 
         {currentTab === 'community' && <CommunitySection />}
       </main>
+
+
+
+
+
+      {/* Adsterra Banner */}
+      <div className="w-full overflow-x-auto flex justify-center py-4">
+        <AdsterraBanner />
+      </div>
+
+
+
 
       {/* 3. FOOTER CONTAINER */}
       <Footer
