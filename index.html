@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      // Compatibility shim for browser extensions/interceptors attempting to assign window.fetch
+      (function() {
+        try {
+          var originalFetch = window.fetch;
+          var currentFetch = originalFetch ? originalFetch.bind(window) : undefined;
+          Object.defineProperty(window, 'fetch', {
+            get: function() {
+              return currentFetch;
+            },
+            set: function(newFetch) {
+              currentFetch = newFetch;
+            },
+            configurable: true,
+            enumerable: true
+          });
+        } catch (e) {}
+
+        try {
+          var savedTheme = localStorage.getItem('ai_prompt_hub_theme');
+          if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+            document.documentElement.classList.remove('light');
+          } else {
+            document.documentElement.classList.add('light');
+            document.documentElement.classList.remove('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+    <title>AI Prompt Hub - Viral AI Video Prompts & Master Prompt Academy</title>
+    <meta name="description" content="Explore, copy, and master viral AI video prompts inspired by soniprompts and theradiotv. Free & premium prompt directory with instant copy and master guides." />
+    <meta property="og:title" content="AI Prompt Hub - Viral AI Video Prompts & Master Prompt Academy" />
+    <meta property="og:description" content="Explore, copy, and master viral AI video prompts inspired by soniprompts and theradiotv. Free & premium prompt directory with instant copy and master guides." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  </head>
+  <body class="antialiased selection:bg-blue-600 selection:text-white transition-colors duration-200">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

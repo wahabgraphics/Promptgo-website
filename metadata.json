@@ -1,0 +1,8 @@
+{
+  "name": "Remix AI Prompt Hub - Viral AI Video Prompts \u0026 Master Prompt Academy",
+  "description": "Explore, copy, and master viral AI video prompts inspired by soniprompts and theradiotv. Free \u0026 premium prompt directory with instant copy and master guides.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

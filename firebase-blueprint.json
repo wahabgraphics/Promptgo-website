@@ -1,0 +1,109 @@
+{
+  "entities": {
+    "Prompt": {
+      "title": "Prompt",
+      "description": "Viral AI video and image prompt document",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 300 },
+        "category": { "type": "string", "maxLength": 100 },
+        "thumbnail_url": { "type": "string", "maxLength": 600000 },
+        "prompt_text": { "type": "string", "maxLength": 50000 },
+        "is_premium": { "type": "boolean" },
+        "views_count": { "type": "string", "maxLength": 30 },
+        "video_url": { "type": "string", "maxLength": 1000 },
+        "aspect_ratio": { "type": "string", "maxLength": 30 },
+        "model_recommended": { "type": "string", "maxLength": 100 },
+        "negative_prompt": { "type": "string", "maxLength": 5000 },
+        "tags": { "type": "array" },
+        "created_at": { "type": "string", "maxLength": 50 },
+        "author_id": { "type": "string", "maxLength": 128 },
+        "author_email": { "type": "string", "maxLength": 200 }
+      },
+      "required": ["title", "category", "thumbnail_url", "prompt_text", "is_premium", "views_count"]
+    },
+    "MasterPrompt": {
+      "title": "MasterPrompt",
+      "description": "Long-form universal master prompt guide and tutorial",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 250 },
+        "slug": { "type": "string", "maxLength": 200 },
+        "category": { "type": "string", "maxLength": 100 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "featured_image": { "type": "string", "maxLength": 1000 },
+        "full_guide": { "type": "string", "maxLength": 15000 },
+        "universal_template": { "type": "string", "maxLength": 5000 },
+        "is_premium": { "type": "boolean" },
+        "created_at": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["title", "slug", "category", "description", "featured_image", "full_guide", "universal_template", "is_premium"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile with subscription and saved prompts",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "maxLength": 200 },
+        "display_name": { "type": "string", "maxLength": 200 },
+        "photo_url": { "type": "string", "maxLength": 1000 },
+        "subscriptionStatus": { "type": "string", "enum": ["active", "inactive", "pending"] },
+        "is_premium": { "type": "boolean" },
+        "role": { "type": "string", "enum": ["user", "admin"] },
+        "stripe_customer_id": { "type": "string", "maxLength": 100 },
+        "saved_prompt_ids": { "type": "array" },
+        "created_at": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["email", "is_premium"]
+    },
+    "PaymentRequest": {
+      "title": "PaymentRequest",
+      "description": "Manual payment verification submission (JazzCash, Easypaisa, Bank Transfer)",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "userEmail": { "type": "string", "maxLength": 200 },
+        "trxId": { "type": "string", "maxLength": 120 },
+        "screenshotUrl": { "type": "string", "maxLength": 600000 },
+        "paymentMethod": { "type": "string", "enum": ["JazzCash", "Easypaisa", "Bank Transfer"] },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "reviewedAt": { "type": "string", "maxLength": 50 },
+        "reviewedBy": { "type": "string", "maxLength": 200 }
+      },
+      "required": ["userId", "userEmail", "trxId", "screenshotUrl", "status", "createdAt"]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Authorized administrator whitelist record",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "maxLength": 200 },
+        "role": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/prompts/{promptId}": {
+      "schema": "Prompt",
+      "description": "Collection of viral AI prompts available in the directory"
+    },
+    "/master_prompts/{masterPromptId}": {
+      "schema": "MasterPrompt",
+      "description": "Collection of comprehensive master prompt guides and case studies"
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile containing plan status and saved bookmarks"
+    },
+    "/payment_requests/{requestId}": {
+      "schema": "PaymentRequest",
+      "description": "Manual subscription payment proofs awaiting admin verification"
+    },
+    "/admins/{adminId}": {
+      "schema": "AdminRecord",
+      "description": "Lookup table for authenticated admins"
+    }
+  }
+}

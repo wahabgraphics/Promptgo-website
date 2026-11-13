@@ -1,0 +1,170 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isBootstrappedAdmin() {
+      return isVerifiedUser() && (
+        (request.auth.token.email != null &&
+         (request.auth.token.email.lower() == 'shayanawan64@gmail.com' ||
+          request.auth.token.email.lower() == 'decorio360@gmail.com')) ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid)) ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin')
+      );
+    }
+
+    function isValidPrompt(data) {
+      return data.keys().hasAll(['title', 'category', 'thumbnail_url', 'prompt_text', 'is_premium', 'views_count']) &&
+        data.keys().hasOnly([
+          'title', 'category', 'thumbnail_url', 'prompt_text', 'is_premium', 'views_count',
+          'video_url', 'aspect_ratio', 'model_recommended', 'negative_prompt', 'tags',
+          'created_at', 'author_id', 'author_email'
+        ]) &&
+        data.title is string && data.title.size() > 0 && data.title.size() <= 300 &&
+        data.category is string && data.category.size() > 0 && data.category.size() <= 100 &&
+        data.thumbnail_url is string && data.thumbnail_url.size() > 0 && data.thumbnail_url.size() <= 600000 &&
+        data.prompt_text is string && data.prompt_text.size() > 0 && data.prompt_text.size() <= 50000 &&
+        data.is_premium is bool &&
+        data.views_count is string && data.views_count.size() <= 30 &&
+        (!('video_url' in data) || (data.video_url is string && data.video_url.size() <= 1000)) &&
+        (!('aspect_ratio' in data) || (data.aspect_ratio is string && data.aspect_ratio.size() <= 30)) &&
+        (!('model_recommended' in data) || (data.model_recommended is string && data.model_recommended.size() <= 100)) &&
+        (!('negative_prompt' in data) || (data.negative_prompt is string && data.negative_prompt.size() <= 5000)) &&
+        (!('tags' in data) || (data.tags is list && data.tags.size() <= 20 && (data.tags.size() == 0 || data.tags[0] is string))) &&
+        (!('created_at' in data) || (data.created_at is string && data.created_at.size() <= 50)) &&
+        (!('author_id' in data) || (data.author_id is string && data.author_id == request.auth.uid && data.author_id.size() <= 128)) &&
+        (!('author_email' in data) || (data.author_email is string && data.author_email.size() <= 200));
+    }
+
+    function isValidMasterPrompt(data) {
+      return data.keys().hasAll(['title', 'slug', 'category', 'description', 'featured_image', 'full_guide', 'universal_template', 'is_premium']) &&
+        data.keys().hasOnly([
+          'title', 'slug', 'category', 'description', 'featured_image', 'full_guide',
+          'universal_template', 'is_premium', 'recommended_tools', 'views_count', 'read_time', 'created_at'
+        ]) &&
+        data.title is string && data.title.size() <= 250 &&
+        data.slug is string && data.slug.size() <= 200 &&
+        data.category is string && data.category.size() <= 100 &&
+        data.description is string && data.description.size() <= 1000 &&
+        data.featured_image is string && data.featured_image.size() <= 300000 &&
+        data.full_guide is string && data.full_guide.size() <= 15000 &&
+        data.universal_template is string && data.universal_template.size() <= 5000 &&
+        data.is_premium is bool &&
+        (!('recommended_tools' in data) || (data.recommended_tools is list && data.recommended_tools.size() <= 20 && (data.recommended_tools.size() == 0 || data.recommended_tools[0] is string))) &&
+        (!('views_count' in data) || (data.views_count is string && data.views_count.size() <= 30)) &&
+        (!('read_time' in data) || (data.read_time is string && data.read_time.size() <= 50)) &&
+        (!('created_at' in data) || (data.created_at is string && data.created_at.size() <= 50));
+    }
+
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['email', 'is_premium']) &&
+        data.email is string && data.email.size() <= 200 &&
+        data.is_premium is bool &&
+        (!('subscriptionStatus' in data) || (data.subscriptionStatus is string && data.subscriptionStatus in ['active', 'inactive', 'pending'])) &&
+        (!('role' in data) || (data.role is string && data.role in ['user', 'admin']));
+    }
+
+    function isValidPaymentRequest(data) {
+      return data.keys().hasAll(['userId', 'userEmail', 'trxId', 'screenshotUrl', 'status', 'createdAt']) &&
+        data.keys().hasOnly(['userId', 'userEmail', 'trxId', 'screenshotUrl', 'paymentMethod', 'status', 'createdAt', 'reviewedAt', 'reviewedBy']) &&
+        data.userId is string && data.userId.size() > 0 && data.userId.size() <= 128 &&
+        data.userEmail is string && data.userEmail.size() > 0 && data.userEmail.size() <= 200 &&
+        data.trxId is string && data.trxId.size() > 0 && data.trxId.size() <= 120 &&
+        data.screenshotUrl is string && data.screenshotUrl.size() > 0 && data.screenshotUrl.size() <= 600000 &&
+        data.status is string && data.status in ['pending', 'approved', 'rejected'] &&
+        data.createdAt is string && data.createdAt.size() <= 50 &&
+        (!('paymentMethod' in data) || (data.paymentMethod is string && data.paymentMethod in ['JazzCash', 'Easypaisa', 'Bank Transfer'])) &&
+        (!('reviewedAt' in data) || (data.reviewedAt is string && data.reviewedAt.size() <= 50)) &&
+        (!('reviewedBy' in data) || (data.reviewedBy is string && data.reviewedBy.size() <= 200));
+    }
+
+    // Prompts: Public read for browsing directory. Creation & management by admin.
+    match /prompts/{promptId} {
+      allow read: if true;
+      allow create: if isBootstrappedAdmin() && isValidId(promptId) && isValidPrompt(incoming());
+      allow update: if isBootstrappedAdmin() && isValidId(promptId) && isValidPrompt(incoming());
+      allow delete: if isBootstrappedAdmin() && isValidId(promptId);
+    }
+
+    // Master Prompts (Academy & Guides): Public read. Management by admin.
+    match /master_prompts/{masterPromptId} {
+      allow read: if true;
+      allow create: if isBootstrappedAdmin() && isValidId(masterPromptId) && isValidMasterPrompt(incoming());
+      allow update: if isBootstrappedAdmin() && isValidId(masterPromptId) && isValidMasterPrompt(incoming());
+      allow delete: if isBootstrappedAdmin() && isValidId(masterPromptId);
+    }
+
+    // User profiles: owner only or admin. Only admins can set subscriptionStatus == 'active' or role == 'admin'.
+    match /users/{userId} {
+      allow read: if isSignedIn() && (request.auth.uid == userId || isBootstrappedAdmin());
+      allow create: if isSignedIn() &&
+        request.auth.uid == userId &&
+        isValidId(userId) &&
+        isValidUserProfile(incoming()) &&
+        incoming().is_premium == false &&
+        (!('role' in incoming()) || incoming().role == 'user') &&
+        (!('subscriptionStatus' in incoming()) || incoming().subscriptionStatus == 'inactive');
+      allow update: if isSignedIn() &&
+        (request.auth.uid == userId || isBootstrappedAdmin()) &&
+        isValidId(userId) &&
+        isValidUserProfile(incoming()) &&
+        (isBootstrappedAdmin() || (
+          ((!('role' in incoming()) && !('role' in existing())) ||
+           (('role' in incoming()) && ('role' in existing()) && incoming().role == existing().role) ||
+           (!('role' in existing()) && incoming().role == 'user')) &&
+          (incoming().is_premium == existing().is_premium || incoming().is_premium == false) &&
+          ((!('subscriptionStatus' in incoming()) && !('subscriptionStatus' in existing())) ||
+           (incoming().subscriptionStatus == existing().subscriptionStatus) ||
+           (incoming().subscriptionStatus in ['pending', 'inactive']))
+        ));
+      allow delete: if isBootstrappedAdmin() && isValidId(userId);
+    }
+
+    // Manual Payment Requests: Verified user can submit pending request for themselves; Admin reviews/approves/rejects.
+    match /payment_requests/{requestId} {
+      allow get: if isSignedIn() && (existing().userId == request.auth.uid || isBootstrappedAdmin());
+      allow list: if isSignedIn() && (resource.data.userId == request.auth.uid || isBootstrappedAdmin());
+      allow create: if isVerifiedUser() &&
+        isValidId(requestId) &&
+        isValidPaymentRequest(incoming()) &&
+        incoming().userId == request.auth.uid &&
+        incoming().status == 'pending';
+      allow update: if isBootstrappedAdmin() &&
+        isValidId(requestId) &&
+        isValidPaymentRequest(incoming()) &&
+        incoming().userId == existing().userId;
+      allow delete: if isBootstrappedAdmin() && isValidId(requestId);
+    }
+
+    // Admins collection
+    match /admins/{adminId} {
+      allow read: if isSignedIn() && (request.auth.uid == adminId || isBootstrappedAdmin());
+      allow write: if isBootstrappedAdmin() && isValidId(adminId);
+    }
+  }
+}
