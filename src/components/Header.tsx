@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import LightVortexFunnel from './LightVortexFunnel';
 import { useNavigate } from 'react-router-dom';
 import {
   Sparkles,
@@ -396,27 +397,24 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
       </div>
 
-      {/* 2. Hero Section Area (DotField animation ONLY behind Hero content) */}
-      {children && (
-        <div className="relative overflow-hidden pb-14 sm:pb-20">
-          {/* Dot Field Animation Background (Strictly scoped to Hero area) */}
-          <div className="absolute inset-0 z-0 pointer-events-none">
-            <DotField
-              dotRadius={1.5}
-              dotSpacing={14}
-              gradientFrom="#93c5fd"
-              gradientTo="#FF9FFC"
-              cursorRadius={240}
-              bulgeStrength={0.6}
-            />
-          </div>
+             {/* 2. Hero Section Area (Light Vortex Funnel animation ONLY behind Hero content) */}
+        {children && (
+          <div className="relative overflow-hidden bg-gradient-to-b from-[#2563eb] via-[#1d4ed8] to-[#0b1120] min-h-[540px] sm:min-h-[640px] pt-2 sm:pt-6 pb-36 sm:pb-52 flex flex-col justify-start">
+            {/* Light Vortex Funnel Backdrop (Strictly scoped to Hero area) */}
+            <div className="absolute inset-0 z-0 pointer-events-none">
+              <LightVortexFunnel
+                primaryColor="#60a5fa"
+                secondaryColor="#e879f9"
+                particleCount={180}
+              />
+            </div>
 
-          {/* Hero Content Foreground */}
-          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6">
-            {children}
+            {/* Hero Content Foreground */}
+            <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6">
+              {children}
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </header>
   );
 };

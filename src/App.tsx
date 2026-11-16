@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { FreePromoSection } from './components/FreePromoSection';
 import AdsterraBanner from './components/AdsterraBanner';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -23,7 +24,6 @@ import { PromptItem, MasterPromptGuide } from './types';
 import { fetchAllPrompts, fetchAllMasterPrompts } from './services/promptService';
 import { INITIAL_CATEGORIES } from './data/initialData';
 import { Bookmark, RefreshCw, AlertCircle, ShieldAlert, X } from 'lucide-react';
-
 
 function HomePage() {
   const { currentUser, userProfile } = useAuth();
@@ -197,15 +197,10 @@ function HomePage() {
         )}
       </Header>
 
-
-
-  {/* Adsterra Banner */}
-      <div className="w-full overflow-x-auto flex justify-center py-4">
+      {/* Adsterra Banner (Below Header) */}
+      <div className="w-full overflow-x-auto flex justify-center py-4 bg-[#fafafa] dark:bg-[#0b0f19]">
         <AdsterraBanner />
       </div>
-
-
-
 
       {/* 2. MAIN BODY CONTAINER */}
       <main
@@ -230,6 +225,15 @@ function HomePage() {
             </div>
           </div>
         )}
+
+        {/* Free Promo Section */}
+        <FreePromoSection
+          onOpenSubscribe={handleSubscribe}
+          onExploreFree={() => {
+            setTierFilter('all');
+            window.scrollBy({ top: 320, behavior: 'smooth' });
+          }}
+        />
 
         {currentTab === 'prompts' && (
           <>
@@ -357,17 +361,10 @@ function HomePage() {
         {currentTab === 'community' && <CommunitySection />}
       </main>
 
-
-
-
-
-      {/* Adsterra Banner */}
-      <div className="w-full overflow-x-auto flex justify-center py-4">
+      {/* Adsterra Banner (Before Footer) */}
+      <div className="w-full overflow-x-auto flex justify-center py-4 bg-[#fafafa] dark:bg-[#0b0f19]">
         <AdsterraBanner />
       </div>
-
-
-
 
       {/* 3. FOOTER CONTAINER */}
       <Footer
