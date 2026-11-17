@@ -182,6 +182,8 @@ function HomePage() {
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
         onOpenSubscribe={handleSubscribe}
+        prompts={prompts}
+        onSelectPrompt={(p: PromptItem) => setSelectedPrompt(p)}
       >
         {currentTab === 'prompts' && (
           <HeroSection
@@ -226,17 +228,16 @@ function HomePage() {
           </div>
         )}
 
-        {/* Free Promo Section */}
-        <FreePromoSection
-          onOpenSubscribe={handleSubscribe}
-          onExploreFree={() => {
-            setTierFilter('all');
-            window.scrollBy({ top: 320, behavior: 'smooth' });
-          }}
-        />
-
         {currentTab === 'prompts' && (
           <>
+            <FreePromoSection
+              onOpenSubscribe={handleSubscribe}
+              onExploreFree={() => {
+                setTierFilter('all');
+                window.scrollBy({ top: 320, behavior: 'smooth' });
+              }}
+            />
+
             <CategoryTabs
               totalPromptsCount={prompts.length || 12}
               filteredCount={filteredPrompts.length}
