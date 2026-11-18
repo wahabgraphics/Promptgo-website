@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { FreePromoSection } from './components/FreePromoSection';
+import { PremiumPicturesShowcase } from './components/PremiumPicturesShowcase';
 import AdsterraBanner from './components/AdsterraBanner';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
@@ -177,7 +177,7 @@ function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col font-['Plus_Jakarta_Sans'] selection:bg-[#2563eb] selection:text-white">
-      {/* 1. HEADER CONTAINER (Full-width #2563eb Royal Blue, non-sticky) */}
+      {/* 1. HEADER CONTAINER */}
       <Header
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
@@ -230,13 +230,12 @@ function HomePage() {
 
         {currentTab === 'prompts' && (
           <>
-            <FreePromoSection
-              onOpenSubscribe={handleSubscribe}
-              onExploreFree={() => {
-                setTierFilter('all');
-                window.scrollBy({ top: 320, behavior: 'smooth' });
-              }}
-            />
+            {!loading && (
+              <PremiumPicturesShowcase
+                prompts={prompts}
+                onSelectPrompt={(p) => setSelectedPrompt(p)}
+              />
+            )}
 
             <CategoryTabs
               totalPromptsCount={prompts.length || 12}
@@ -398,12 +397,10 @@ export default function App() {
       <AuthProvider>
         <BrowserRouter>
           <Routes>
-            {/* Public Routes (Uses #2563eb Header & Footer inside HomePage / LoginPage / ProfilePage) */}
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/profile" element={<ProfilePage />} />
 
-            {/* Hidden Admin Routes (Uses standalone AdminLayout without public Header/Footer) */}
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<AdminPage section="dashboard" />} />
               <Route path="add" element={<AdminPage section="add" />} />
