@@ -97,7 +97,7 @@ export const SubscriptionBanner: React.FC<SubscriptionBannerProps> = ({ onOpenSu
           </div>
           <div>
             <h3 className="text-sm sm:text-base font-extrabold tracking-wide uppercase text-white">
-              🔒 Subscribe to unlock all prompts — full text, images &amp; copy button
+              🔒 Subscribe to unlock all prompts
             </h3>
             <p className="text-xs mt-0.5 text-red-100">
               Instant access to secret camera parameters, negative prompts, and 100M+ TikTok viral formulas.
