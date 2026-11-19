@@ -203,7 +203,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
             <Crown className="w-5 h-5 text-amber-500" />
             <div>
               <h2 className="font-extrabold text-sm uppercase tracking-wider">
-                VIP Subscription — $5/month (PKR 1,400)
+                VIP Subscription — $2/month (PKR 500)
               </h2>
               <p className={`text-[11px] ${isDark ? 'text-zinc-400' : 'text-zinc-500'}`}>
                 Pay via JazzCash, Easypaisa, or Bank Transfer &amp; upload receipt
@@ -294,7 +294,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose }) =
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-extrabold uppercase tracking-wider text-blue-600">
-                    Step 1 — Send $5/month (PKR 1,400) to Any Account
+                    Step 1 — Send $2/month (PKR 500) to Any Account
                   </h3>
                 </div>
 
