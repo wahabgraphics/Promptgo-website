@@ -118,7 +118,7 @@ export const SubscriptionBanner: React.FC<SubscriptionBannerProps> = ({ onOpenSu
             onClick={onOpenSubscribe}
             className="px-5 py-2.5 bg-white hover:bg-red-50 text-red-600 font-black text-xs sm:text-sm rounded-xl shadow-lg active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
           >
-            <span>Subscribe for $5/month</span>
+            <span>Subscribe for $2/month</span>
             <ArrowRight className="w-4 h-4 text-red-600" />
           </button>
         </div>
